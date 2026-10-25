@@ -1,0 +1,50 @@
+// Reference: https://containers.dev/implementors/json_reference/
+// Guide: https://containers.dev/guide/dockerfile#docker-compose
+{
+	// General devcontainer.json properties
+	// https://containers.dev/implementors/json_reference/#general-properties
+	"name": "T3Ext: HHDev-LoremIpsum generator",
+	"forwardPorts": [
+		8080
+	],
+	"overrideCommand": false,
+	"remoteUser": "developer",
+	"shutdownAction": "stopCompose",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				// PHP
+				"bmewburn.vscode-intelephense-client",
+				"recca0120.vscode-phpunit",
+				"xdebug.php-debug",
+				// MySQL
+				"cweijan.vscode-mysql-client2",
+				// REST Client
+				"humao.rest-client",
+				// Makefile
+				"ms-vscode.makefile-tools",
+				// Formatters
+				"EditorConfig.EditorConfig",
+				"esbenp.prettier-vscode",
+				"lumirelle.shell-format-rev",
+				"redhat.vscode-yaml",
+				"redhat.vscode-xml"
+			]
+		}
+	},
+	// Docker Compose specific properties
+	// https://containers.dev/implementors/json_reference/#compose-specific
+	"dockerComposeFile": "../.docker/compose.yaml",
+	"service": "web",
+	"runServices": [
+		"web",
+		"db"
+	],
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	// Lifecycle scripts
+	// https://containers.dev/implementors/json_reference/#lifecycle-scripts
+	"postCreateCommand": {
+		"env": "[ -f ../.devcontainer.init ] && bash ../.devcontainer.init zsh claude || true",
+		"www": "sudo rm -rf /var/www/html && sudo chown -R developer:developer /var/www && ln -s /workspaces/${localWorkspaceFolderBasename} /var/www/html"
+	}
+}

@@ -1,0 +1,65 @@
+---
+services:
+  web:
+    env_file: .env
+    image: ${IMAGE_PREFIX:-}hhdev/php:8.5-apache-dev
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'curl -s -o /dev/null --header "Host: $${APACHE_SERVER_NAME}" http://localhost:$${APACHE_PORT:-8080}/',
+        ]
+      interval: 2s
+      timeout: 5s
+      retries: 60
+    network_mode: service:db
+    volumes:
+      - storage_volume:/workspaces/.volume
+      - ../..:/workspaces
+
+  db:
+    command:
+      [
+        "mysqld",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+        "--max_allowed_packet=64M",
+      ]
+    env_file: .env
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_USER: "${DB_USER}"
+    image: ${IMAGE_PREFIX:-}mariadb:10.11
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 2s
+      timeout: 5s
+      retries: 60
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.https-www-${PROJECT_NAME}.entrypoints=websecure"
+      # web
+      - "traefik.http.routers.https-www-${PROJECT_NAME}.rule=Host(`${APACHE_SERVER_NAME:-localhost}`)"
+      - "traefik.http.routers.https-www-${PROJECT_NAME}.tls=true"
+      - "traefik.http.routers.https-www-${PROJECT_NAME}.service=https-www-${PROJECT_NAME}"
+      - "traefik.http.services.https-www-${PROJECT_NAME}.loadbalancer.server.port=8443"
+      - "traefik.http.services.https-www-${PROJECT_NAME}.loadbalancer.server.scheme=https"
+    extra_hosts:
+      - "${APACHE_SERVER_NAME:-localhost}:${TRAEFIK_IP:-127.0.0.1}"
+    networks:
+      - localweb
+    volumes:
+      - storage_db:/var/lib/mysql
+
+networks:
+  localweb:
+    name: ${DOCKER_NETWORK}
+    external: ${DOCKER_EXTERNAL:-true}
+
+volumes:
+  storage_db: ~
+  storage_volume:
+    name: ${DOCKER_VOLUME}
+    external: ${DOCKER_EXTERNAL:-true}

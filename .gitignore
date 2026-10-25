@@ -1,0 +1,21 @@
+# Operating system
+.DS_Store
+Thumbs.db
+
+# IntelliJ IDEA & PhpStorm
+.claude
+.idea
+.vscode
+
+# Runtime
+/.bin
+/.public
+/.reports
+/.vendor
+/config
+/var
+
+# Common
+/.local.*
+/composer.lock
+/**/*.cache

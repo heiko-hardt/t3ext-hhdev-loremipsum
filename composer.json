@@ -1,0 +1,58 @@
+{
+	"name": "heikohardt/hhdev-loremipsum",
+	"description": "Dummy Text & Image Generator for TYPO3 CMS",
+	"license": [
+		"GPL-2.0-or-later"
+	],
+	"type": "typo3-cms-extension",
+	"keywords": [
+		"TYPO3 CMS"
+	],
+	"require": {
+		"php": "^8.2",
+		"typo3/cms-core": "^13.3"
+	},
+	"require-dev": {
+		"heikohardt/typo3-env-configurator": "^1.0",
+		"typo3/cms-backend": "^13.4 || ^14.3",
+		"typo3/cms-belog": "^13.4 || ^14.3",
+		"typo3/cms-beuser": "^13.4 || ^14.3",
+		"typo3/cms-extbase": "^13.4 || ^14.3",
+		"typo3/cms-extensionmanager": "^13.4 || ^14.3",
+		"typo3/cms-filelist": "^13.4 || ^14.3",
+		"typo3/cms-fluid": "^13.4 || ^14.3",
+		"typo3/cms-fluid-styled-content": "^13.4 || ^14.3",
+		"typo3/cms-frontend": "^13.4 || ^14.3",
+		"typo3/cms-install": "^13.4 || ^14.3",
+		"typo3/cms-lowlevel": "^13.4 || ^14.3",
+		"typo3/cms-recordlist": "^13.4 || ^14.3",
+		"typo3/cms-reports": "^13.4 || ^14.3",
+		"typo3/cms-rte-ckeditor": "^13.4 || ^14.3",
+		"typo3/cms-tstemplate": "^13.4 || ^14.3"
+	},
+	"autoload": {
+		"psr-4": {
+			"HeikoHardt\\HHDevLoremIpsum\\": "Classes/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"HeikoHardt\\HHDevLoremIpsum\\Tests\\": "Tests/"
+		}
+	},
+	"config": {
+		"allow-plugins": true,
+		"bin-dir": ".bin",
+		"sort-packages": true,
+		"vendor-dir": ".vendor"
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-main": "0.1.x-dev"
+		},
+		"typo3/cms": {
+			"extension-key": "hhdev_loremipsum",
+			"web-dir": ".public"
+		}
+	}
+}
